@@ -1,0 +1,251 @@
+{
+  "nombre": "Regresión ridge (DEMO)",
+  "version": "0.1.0-mock",
+  "generado": "2026-10-03",
+  "es_mock": true,
+  "descripcion": "Datos sintéticos de demostración. Se reemplazarán por las salidas del modelo real del equipo.",
+  "intervalo": "Intervalo de predicción al 80 %",
+  "variables": [
+    {
+      "nombre": "ndvi_max",
+      "etiqueta": "NDVI máximo",
+      "unidad": "",
+      "grupo": "indice",
+      "descripcion": "Qué tan verde y vigoroso estuvo el cultivo en su mejor momento."
+    },
+    {
+      "nombre": "evi_max",
+      "etiqueta": "EVI máximo",
+      "unidad": "",
+      "grupo": "indice",
+      "descripcion": "Vigor del cultivo, menos sensible al suelo desnudo y a la atmósfera."
+    },
+    {
+      "nombre": "ndre_max",
+      "etiqueta": "NDRE máximo",
+      "unidad": "",
+      "grupo": "indice",
+      "descripcion": "Contenido de clorofila (nutrición) de la planta."
+    },
+    {
+      "nombre": "precip_total",
+      "etiqueta": "Lluvia acumulada",
+      "unidad": "mm",
+      "grupo": "clima",
+      "descripcion": "Lluvia total durante el ciclo (todas las parcelas son de temporal)."
+    },
+    {
+      "nombre": "temp_media",
+      "etiqueta": "Temperatura media",
+      "unidad": "°C",
+      "grupo": "clima",
+      "descripcion": "Temperatura promedio durante el ciclo."
+    },
+    {
+      "nombre": "elevacion",
+      "etiqueta": "Elevación",
+      "unidad": "m",
+      "grupo": "geofisica",
+      "descripcion": "Altura sobre el nivel del mar."
+    },
+    {
+      "nombre": "pendiente",
+      "etiqueta": "Pendiente",
+      "unidad": "%",
+      "grupo": "geofisica",
+      "descripcion": "Inclinación del terreno."
+    }
+  ],
+  "metricas": {
+    "rmse": 0.467,
+    "mae": 0.372,
+    "r2": 0.635,
+    "validacion": "Validación cruzada espacial: se deja fuera un municipio a la vez",
+    "por_estado": [
+      {
+        "estado": "Hidalgo",
+        "n": 53,
+        "rmse": 0.467,
+        "mae": 0.385,
+        "r2": 0.63
+      },
+      {
+        "estado": "Tlaxcala",
+        "n": 49,
+        "rmse": 0.475,
+        "mae": 0.368,
+        "r2": 0.425
+      },
+      {
+        "estado": "Puebla",
+        "n": 36,
+        "rmse": 0.456,
+        "mae": 0.357,
+        "r2": 0.569
+      }
+    ]
+  },
+  "importancias": [
+    {
+      "variable": "ndre_max",
+      "importancia": 0.307
+    },
+    {
+      "variable": "ndvi_max",
+      "importancia": 0.271
+    },
+    {
+      "variable": "precip_total",
+      "importancia": 0.213
+    },
+    {
+      "variable": "pendiente",
+      "importancia": 0.117
+    },
+    {
+      "variable": "elevacion",
+      "importancia": 0.068
+    },
+    {
+      "variable": "temp_media",
+      "importancia": 0.016
+    },
+    {
+      "variable": "evi_max",
+      "importancia": 0.008
+    }
+  ],
+  "combinaciones": [
+    {
+      "nombre": "Solo índices de vegetación",
+      "variables": [
+        "ndvi_max",
+        "evi_max",
+        "ndre_max"
+      ],
+      "rmse": 0.506,
+      "r2": 0.572
+    },
+    {
+      "nombre": "Solo clima",
+      "variables": [
+        "precip_total",
+        "temp_media"
+      ],
+      "rmse": 0.688,
+      "r2": 0.207
+    },
+    {
+      "nombre": "Solo geofísicas (DEM)",
+      "variables": [
+        "elevacion",
+        "pendiente"
+      ],
+      "rmse": 0.736,
+      "r2": 0.093
+    },
+    {
+      "nombre": "NDVI + precipitación",
+      "variables": [
+        "ndvi_max",
+        "precip_total"
+      ],
+      "rmse": 0.478,
+      "r2": 0.617
+    },
+    {
+      "nombre": "Índices + clima",
+      "variables": [
+        "ndvi_max",
+        "evi_max",
+        "ndre_max",
+        "precip_total",
+        "temp_media"
+      ],
+      "rmse": 0.475,
+      "r2": 0.623
+    },
+    {
+      "nombre": "Todas las variables",
+      "variables": [
+        "ndvi_max",
+        "evi_max",
+        "ndre_max",
+        "precip_total",
+        "temp_media",
+        "elevacion",
+        "pendiente"
+      ],
+      "rmse": 0.467,
+      "r2": 0.635
+    }
+  ],
+  "simulador": {
+    "tipo": "lineal",
+    "descripcion": "En esta demostración el simulador es el mismo modelo ridge.",
+    "rmse": 0.467,
+    "intercepto": 2.9709,
+    "variables": [
+      {
+        "nombre": "ndvi_max",
+        "coef": 0.237,
+        "media": 0.664,
+        "std": 0.0734,
+        "min": 0.475,
+        "max": 0.862
+      },
+      {
+        "nombre": "evi_max",
+        "coef": 0.0074,
+        "media": 0.4538,
+        "std": 0.0513,
+        "min": 0.316,
+        "max": 0.565
+      },
+      {
+        "nombre": "ndre_max",
+        "coef": 0.2689,
+        "media": 0.3456,
+        "std": 0.0562,
+        "min": 0.213,
+        "max": 0.516
+      },
+      {
+        "nombre": "precip_total",
+        "coef": 0.1865,
+        "media": 518.9841,
+        "std": 72.1008,
+        "min": 339.3,
+        "max": 714.5
+      },
+      {
+        "nombre": "temp_media",
+        "coef": -0.0138,
+        "media": 14.7904,
+        "std": 0.5239,
+        "min": 13.55,
+        "max": 16.37
+      },
+      {
+        "nombre": "elevacion",
+        "coef": 0.0592,
+        "media": 2496.9203,
+        "std": 83.0339,
+        "min": 2297,
+        "max": 2681
+      },
+      {
+        "nombre": "pendiente",
+        "coef": -0.1023,
+        "media": 4.2146,
+        "std": 2.4385,
+        "min": 0.59,
+        "max": 14.03
+      }
+    ]
+  },
+  "umbrales": {
+    "bajo": 2.5,
+    "alto": 3.5
+  }
+}
