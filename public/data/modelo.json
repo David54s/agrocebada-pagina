@@ -1,10 +1,10 @@
 {
-  "nombre": "Regresión ridge (DEMO)",
-  "version": "0.1.0-mock",
-  "generado": "2026-10-03",
-  "es_mock": true,
-  "descripcion": "Datos sintéticos de demostración. Se reemplazarán por las salidas del modelo real del equipo.",
-  "intervalo": "Intervalo de predicción al 80 %",
+  "nombre": "Ridge (provisional)",
+  "version": "0.2.0",
+  "generado": "2026-10-11",
+  "es_mock": false,
+  "descripcion": "Modelo provisional: regresión ridge con índices de Planet, clima y relieve. Se reemplazará por el modelo final del equipo.",
+  "intervalo": "Intervalo de predicción al 80 % (± 1.28 · RMSE de validación cruzada)",
   "variables": [
     {
       "nombre": "ndvi_max",
@@ -21,231 +21,291 @@
       "descripcion": "Vigor del cultivo, menos sensible al suelo desnudo y a la atmósfera."
     },
     {
-      "nombre": "ndre_max",
-      "etiqueta": "NDRE máximo",
-      "unidad": "",
+      "nombre": "lai_max",
+      "etiqueta": "LAI máximo",
+      "unidad": "m²/m²",
       "grupo": "indice",
-      "descripcion": "Contenido de clorofila (nutrición) de la planta."
+      "descripcion": "Cuánta hoja cubrió el suelo en el mejor momento del ciclo."
     },
     {
-      "nombre": "precip_total",
-      "etiqueta": "Lluvia acumulada",
+      "nombre": "prec_abr_oct",
+      "etiqueta": "Lluvia abril-octubre",
       "unidad": "mm",
       "grupo": "clima",
       "descripcion": "Lluvia total durante el ciclo (todas las parcelas son de temporal)."
     },
     {
-      "nombre": "temp_media",
-      "etiqueta": "Temperatura media",
-      "unidad": "°C",
+      "nombre": "prec_anomalia",
+      "etiqueta": "Lluvia vs. años anteriores",
+      "unidad": "mm",
       "grupo": "clima",
-      "descripcion": "Temperatura promedio durante el ciclo."
+      "descripcion": "Cuánta lluvia más (o menos) cayó en 2025 que el promedio de 2022 a 2024."
     },
     {
-      "nombre": "elevacion",
+      "nombre": "tmin_media_abr_oct",
+      "etiqueta": "Temperatura mínima media",
+      "unidad": "°C",
+      "grupo": "clima",
+      "descripcion": "Promedio de las temperaturas más bajas del día durante el ciclo."
+    },
+    {
+      "nombre": "tmax_media_abr_oct",
+      "etiqueta": "Temperatura máxima media",
+      "unidad": "°C",
+      "grupo": "clima",
+      "descripcion": "Promedio de las temperaturas más altas del día durante el ciclo."
+    },
+    {
+      "nombre": "elev_mean",
       "etiqueta": "Elevación",
       "unidad": "m",
       "grupo": "geofisica",
-      "descripcion": "Altura sobre el nivel del mar."
+      "descripcion": "Altura de la parcela sobre el nivel del mar."
     },
     {
-      "nombre": "pendiente",
+      "nombre": "pend_mean",
       "etiqueta": "Pendiente",
-      "unidad": "%",
+      "unidad": "°",
       "grupo": "geofisica",
-      "descripcion": "Inclinación del terreno."
+      "descripcion": "Qué tan inclinado es el terreno."
     }
   ],
   "metricas": {
-    "rmse": 0.467,
-    "mae": 0.372,
-    "r2": 0.635,
-    "validacion": "Validación cruzada espacial: se deja fuera un municipio a la vez",
+    "rmse": 0.5512,
+    "mae": 0.4175,
+    "r2": 0.5775,
+    "validacion": "CV de 5 folds estratificada por estado (semilla 42)",
     "por_estado": [
       {
         "estado": "Hidalgo",
-        "n": 53,
-        "rmse": 0.467,
-        "mae": 0.385,
-        "r2": 0.63
-      },
-      {
-        "estado": "Tlaxcala",
-        "n": 49,
-        "rmse": 0.475,
-        "mae": 0.368,
-        "r2": 0.425
+        "n": 36,
+        "rmse": 0.5133,
+        "mae": 0.403,
+        "r2": 0.5519
       },
       {
         "estado": "Puebla",
-        "n": 36,
-        "rmse": 0.456,
-        "mae": 0.357,
-        "r2": 0.569
+        "n": 71,
+        "rmse": 0.6043,
+        "mae": 0.44,
+        "r2": -0.0844
+      },
+      {
+        "estado": "Tlaxcala",
+        "n": 31,
+        "rmse": 0.4589,
+        "mae": 0.383,
+        "r2": -0.5388
       }
     ]
   },
   "importancias": [
     {
-      "variable": "ndre_max",
-      "importancia": 0.307
+      "variable": "tmin_media_abr_oct",
+      "importancia": 0.47
+    },
+    {
+      "variable": "prec_anomalia",
+      "importancia": 0.3405
+    },
+    {
+      "variable": "tmax_media_abr_oct",
+      "importancia": 0.1972
     },
     {
       "variable": "ndvi_max",
-      "importancia": 0.271
+      "importancia": 0.1672
     },
     {
-      "variable": "precip_total",
-      "importancia": 0.213
+      "variable": "pend_mean",
+      "importancia": 0.0941
     },
     {
-      "variable": "pendiente",
-      "importancia": 0.117
-    },
-    {
-      "variable": "elevacion",
-      "importancia": 0.068
-    },
-    {
-      "variable": "temp_media",
-      "importancia": 0.016
+      "variable": "lai_max",
+      "importancia": 0.0817
     },
     {
       "variable": "evi_max",
-      "importancia": 0.008
+      "importancia": 0.0712
+    },
+    {
+      "variable": "elev_mean",
+      "importancia": 0.0332
+    },
+    {
+      "variable": "prec_abr_oct",
+      "importancia": 0.0208
     }
   ],
   "combinaciones": [
     {
-      "nombre": "Solo índices de vegetación",
+      "nombre": "Solo índices",
       "variables": [
         "ndvi_max",
         "evi_max",
-        "ndre_max"
+        "lai_max"
       ],
-      "rmse": 0.506,
-      "r2": 0.572
+      "rmse": 0.8375,
+      "r2": 0.0247
     },
     {
       "nombre": "Solo clima",
       "variables": [
-        "precip_total",
-        "temp_media"
+        "prec_abr_oct",
+        "prec_anomalia",
+        "tmin_media_abr_oct",
+        "tmax_media_abr_oct"
       ],
-      "rmse": 0.688,
-      "r2": 0.207
+      "rmse": 0.5458,
+      "r2": 0.5859
     },
     {
-      "nombre": "Solo geofísicas (DEM)",
+      "nombre": "Solo relieve",
       "variables": [
-        "elevacion",
-        "pendiente"
+        "elev_mean",
+        "pend_mean"
       ],
-      "rmse": 0.736,
-      "r2": 0.093
-    },
-    {
-      "nombre": "NDVI + precipitación",
-      "variables": [
-        "ndvi_max",
-        "precip_total"
-      ],
-      "rmse": 0.478,
-      "r2": 0.617
+      "rmse": 0.8104,
+      "r2": 0.0869
     },
     {
       "nombre": "Índices + clima",
       "variables": [
         "ndvi_max",
         "evi_max",
-        "ndre_max",
-        "precip_total",
-        "temp_media"
+        "lai_max",
+        "prec_abr_oct",
+        "prec_anomalia",
+        "tmin_media_abr_oct",
+        "tmax_media_abr_oct"
       ],
-      "rmse": 0.475,
-      "r2": 0.623
+      "rmse": 0.5453,
+      "r2": 0.5865
     },
     {
-      "nombre": "Todas las variables",
+      "nombre": "Índices + relieve",
       "variables": [
         "ndvi_max",
         "evi_max",
-        "ndre_max",
-        "precip_total",
-        "temp_media",
-        "elevacion",
-        "pendiente"
+        "lai_max",
+        "elev_mean",
+        "pend_mean"
       ],
-      "rmse": 0.467,
-      "r2": 0.635
+      "rmse": 0.7846,
+      "r2": 0.1441
+    },
+    {
+      "nombre": "Clima + relieve",
+      "variables": [
+        "prec_abr_oct",
+        "prec_anomalia",
+        "tmin_media_abr_oct",
+        "tmax_media_abr_oct",
+        "elev_mean",
+        "pend_mean"
+      ],
+      "rmse": 0.5499,
+      "r2": 0.5795
+    },
+    {
+      "nombre": "Índices + clima + relieve",
+      "variables": [
+        "ndvi_max",
+        "evi_max",
+        "lai_max",
+        "prec_abr_oct",
+        "prec_anomalia",
+        "tmin_media_abr_oct",
+        "tmax_media_abr_oct",
+        "elev_mean",
+        "pend_mean"
+      ],
+      "rmse": 0.5512,
+      "r2": 0.5775
     }
   ],
   "simulador": {
     "tipo": "lineal",
-    "descripcion": "En esta demostración el simulador es el mismo modelo ridge.",
-    "rmse": 0.467,
-    "intercepto": 2.9709,
+    "descripcion": "Es el modelo ridge completo (alpha = 3.86), no un sustituto: da las mismas predicciones que el mapa.",
+    "rmse": 0.0,
+    "intercepto": 3.955362,
     "variables": [
       {
         "nombre": "ndvi_max",
-        "coef": 0.237,
-        "media": 0.664,
-        "std": 0.0734,
-        "min": 0.475,
-        "max": 0.862
+        "coef": 0.167165,
+        "media": 0.770928,
+        "std": 0.059942,
+        "min": 0.577,
+        "max": 0.907
       },
       {
         "nombre": "evi_max",
-        "coef": 0.0074,
-        "media": 0.4538,
-        "std": 0.0513,
-        "min": 0.316,
-        "max": 0.565
+        "coef": -0.071165,
+        "media": 0.579725,
+        "std": 0.090681,
+        "min": 0.405,
+        "max": 0.877
       },
       {
-        "nombre": "ndre_max",
-        "coef": 0.2689,
-        "media": 0.3456,
-        "std": 0.0562,
-        "min": 0.213,
-        "max": 0.516
+        "nombre": "lai_max",
+        "coef": -0.081659,
+        "media": 2.756971,
+        "std": 0.309245,
+        "min": 1.9,
+        "max": 3.663
       },
       {
-        "nombre": "precip_total",
-        "coef": 0.1865,
-        "media": 518.9841,
-        "std": 72.1008,
-        "min": 339.3,
-        "max": 714.5
+        "nombre": "prec_abr_oct",
+        "coef": 0.020821,
+        "media": 948.886074,
+        "std": 172.741599,
+        "min": 702.5829,
+        "max": 1459.1384
       },
       {
-        "nombre": "temp_media",
-        "coef": -0.0138,
-        "media": 14.7904,
-        "std": 0.5239,
-        "min": 13.55,
-        "max": 16.37
+        "nombre": "prec_anomalia",
+        "coef": -0.340472,
+        "media": 288.70239,
+        "std": 105.607131,
+        "min": 202.0289,
+        "max": 574.4595
       },
       {
-        "nombre": "elevacion",
-        "coef": 0.0592,
-        "media": 2496.9203,
-        "std": 83.0339,
-        "min": 2297,
-        "max": 2681
+        "nombre": "tmin_media_abr_oct",
+        "coef": 0.469967,
+        "media": 12.875548,
+        "std": 0.552853,
+        "min": 11.4159,
+        "max": 13.4846
       },
       {
-        "nombre": "pendiente",
-        "coef": -0.1023,
-        "media": 4.2146,
-        "std": 2.4385,
-        "min": 0.59,
-        "max": 14.03
+        "nombre": "tmax_media_abr_oct",
+        "coef": -0.197219,
+        "media": 23.668524,
+        "std": 0.165941,
+        "min": 23.2503,
+        "max": 24.0085
+      },
+      {
+        "nombre": "elev_mean",
+        "coef": -0.033231,
+        "media": 2671.010489,
+        "std": 97.116959,
+        "min": 2497.2,
+        "max": 2905.25
+      },
+      {
+        "nombre": "pend_mean",
+        "coef": 0.09411,
+        "media": 2.86207,
+        "std": 2.039314,
+        "min": 0.2826,
+        "max": 8.9309
       }
     ]
   },
   "umbrales": {
-    "bajo": 2.5,
-    "alto": 3.5
+    "bajo": 3.5,
+    "alto": 4.5
   }
 }

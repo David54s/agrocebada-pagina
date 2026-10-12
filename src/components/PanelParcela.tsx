@@ -55,7 +55,7 @@ export default function PanelParcela({ parcela }: { parcela?: Parcela }) {
         </div>
         {p.rendimiento_real !== null && (
           <div className="col-span-2">
-            <dt className="text-ink-2">Reportado por el productor</dt>
+            <dt className="text-ink-2">Rendimiento reportado</dt>
             <dd className="font-medium">{tha(p.rendimiento_real)}</dd>
           </div>
         )}

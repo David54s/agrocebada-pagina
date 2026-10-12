@@ -74,7 +74,7 @@ function Capa({
               <div className="mt-0.5 text-sm font-semibold">
                 {v === null ? 'Sin rendimiento reportado' : tha(v)}
               </div>
-              <div className="text-ink-2">{colorPor === 'real' ? 'Reportado por el productor' : 'Estimado por el modelo'}</div>
+              <div className="text-ink-2">{colorPor === 'real' ? 'Rendimiento reportado' : 'Estimado por el modelo'}</div>
             </div>
           </Tooltip>
         )

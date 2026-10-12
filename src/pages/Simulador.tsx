@@ -71,7 +71,7 @@ export default function Simulador() {
         <p className="max-w-prose text-sm text-ink-2">
           {modo === 'productor'
             ? 'Mueve los controles para ver cómo cambiaría la cosecha esperada si cambian las condiciones de tu parcela.'
-            : `Ejecuta el modelo en el navegador. ${sim.descripcion} ${sim.rmse !== undefined ? `RMSE del sustituto: ${num(sim.rmse, 3)} t/ha.` : ''}`}
+            : `Ejecuta el modelo en el navegador. ${sim.descripcion} ${sim.rmse ? `RMSE del sustituto: ${num(sim.rmse, 3)} t/ha.` : ''}`}
         </p>
       </div>
 

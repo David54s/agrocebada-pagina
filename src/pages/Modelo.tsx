@@ -48,12 +48,12 @@ export default function Modelo() {
         <h1 className="text-2xl font-semibold">¿Qué tan confiable es la estimación?</h1>
         <Card>
           <p className="text-lg">
-            En promedio, la estimación se aleja <strong>± {num(metricas.rmse, 1)} toneladas por hectárea</strong> de lo
-            que el productor reportó al cosechar.
+            En promedio, la estimación se aleja <strong>± {num(metricas.rmse, 1)} toneladas por hectárea</strong> del
+            rendimiento reportado al cosechar.
           </p>
           <p className="mt-2 text-sm text-ink-2">
-            Lo medimos con {nEntr} parcelas cuyo rendimiento conocemos, ocultándole al modelo un municipio completo a la
-            vez para simular parcelas que nunca ha visto.
+            Lo medimos con {nEntr} parcelas cuyo rendimiento conocemos: cada una se estimó con un modelo que no la vio
+            al aprender, para simular parcelas nuevas.
           </p>
         </Card>
         <Card titulo="Lo que más influye en la cosecha">
@@ -94,7 +94,7 @@ export default function Modelo() {
         <Stat etiqueta="RMSE" valor={`${num(metricas.rmse, 3)} t/ha`} detalle="Métrica principal de FIRA" />
         <Stat etiqueta="MAE" valor={`${num(metricas.mae, 3)} t/ha`} />
         <Stat etiqueta="R²" valor={num(metricas.r2, 3)} />
-        <Stat etiqueta="Parcelas de entrenamiento" valor={nEntr} detalle="Rendimiento autorreportado" />
+        <Stat etiqueta="Parcelas de entrenamiento" valor={nEntr} detalle="Rendimiento reportado" />
       </section>
 
       <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">

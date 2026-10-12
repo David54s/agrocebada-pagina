@@ -45,7 +45,7 @@ export default function ObsPred() {
             domain={[lo, hi]}
             tickCount={hi - lo + 1}
             {...ejeProps}
-            label={{ value: 'Reportado por el productor (t/ha)', position: 'insideBottom', offset: -12, fill: 'var(--ink-2)', fontSize: 12 }}
+            label={{ value: 'Rendimiento reportado (t/ha)', position: 'insideBottom', offset: -12, fill: 'var(--ink-2)', fontSize: 12 }}
           />
           <YAxis
             type="number"

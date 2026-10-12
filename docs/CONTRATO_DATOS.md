@@ -127,7 +127,7 @@ El mismo CSV que se manda a innovacion@fira.gob.mx; la app solo ofrece descargar
 
 ```
 ID_POLIGONO,rendimiento_pred
-P001,4.21
+AGC_003,3.3293
 ```
 
 Ajustar las columnas a la plantilla que envíe FIRA por correo.

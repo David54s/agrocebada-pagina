@@ -29,12 +29,18 @@ npm run dev        # http://localhost:5173
 | `npm run mock` | Regenera los datos de **demostración** en `public/data/` |
 | `npm run validate` | Valida `public/data/` contra el contrato de datos |
 
-## Conectar el modelo real
+## Datos del modelo
 
-1. El equipo de modelación exporta los archivos descritos en [docs/CONTRATO_DATOS.md](docs/CONTRATO_DATOS.md).
-2. Se copian a `public/data/`, reemplazando los de demostración.
+Los archivos de `public/data/` ya son **datos reales** (197 parcelas de FIRA) con un modelo ridge
+provisional. Los genera `src/exportar_app.py` del repo de modelación
+([Cebada-Vision](https://github.com/OsmarGHz/Cebada-Vision)) con el formato de
+[docs/CONTRATO_DATOS.md](docs/CONTRATO_DATOS.md). Para actualizarlos:
+
+1. En Cebada-Vision: `.venv/Scripts/python.exe src/exportar_app.py` (escribe en `data/app/`).
+2. Copiar los 4 archivos de `data/app/` a `public/data/`.
 3. `npm run validate` debe terminar sin errores.
-4. En `modelo.json`, `"es_mock": false` quita el aviso amarillo.
+
+`npm run mock` sobrescribe `public/data/` con datos sintéticos; solo usarlo para pruebas.
 
 No hace falta cambiar código: las variables, etiquetas, umbrales y métricas se leen de los
 archivos.

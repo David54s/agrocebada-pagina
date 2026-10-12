@@ -85,7 +85,7 @@ export default function Parcela() {
               </div>
               {p.rendimiento_real !== null && (
                 <div>
-                  <dt className="text-ink-2">Reportado por el productor</dt>
+                  <dt className="text-ink-2">Rendimiento reportado</dt>
                   <dd className="text-xl font-semibold">{tha(p.rendimiento_real)}</dd>
                   {modo === 'analista' && p.prediccion_cv !== null && (
                     <dd className="tabular text-xs text-muted">
@@ -125,7 +125,7 @@ export default function Parcela() {
           subtitulo={
             modo === 'productor'
               ? 'Comparado con una parcela promedio de la región.'
-              : 'Descomposición del modelo sustituto lineal: coef × (x − media) / std, en t/ha.'
+              : 'Descomposición del modelo lineal: coef × (x − media) / std, en t/ha.'
           }
         >
           {aportes ? (

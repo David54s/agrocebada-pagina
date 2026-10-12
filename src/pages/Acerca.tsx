@@ -28,10 +28,18 @@ export default function Acerca() {
 
       <Card titulo="Limitaciones">
         <ul className="list-disc space-y-1.5 pl-5 text-sm text-ink-2">
-          <li>El rendimiento de entrenamiento es autorreportado por el productor, sin medición instrumental; incluye ruido.</li>
+          <li>
+            El rendimiento de entrenamiento lo reporta en su mayoría la comercializadora que compra la cosecha, sin
+            medición instrumental; incluye ruido.
+          </li>
+          <li>El clima viene en celdas de ~5 km: parcelas vecinas comparten el mismo valor de lluvia y temperatura.</li>
           <li>Todas las parcelas son de temporal: el modelo no aplica directamente a parcelas de riego.</li>
           <li>Las nubes y sombras pueden bajar artificialmente los índices satelitales; la ficha permite filtrarlas.</li>
-          <li>El simulador usa un modelo sustituto lineal que aproxima al modelo principal.</li>
+          <li>
+            {modelo.simulador.rmse === 0
+              ? 'El simulador ejecuta el mismo modelo lineal que genera las predicciones del mapa.'
+              : 'El simulador usa un modelo sustituto lineal que aproxima al modelo principal.'}
+          </li>
         </ul>
       </Card>
 
