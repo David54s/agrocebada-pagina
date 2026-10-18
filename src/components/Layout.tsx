@@ -79,7 +79,7 @@ export default function Layout() {
         <Outlet />
       </main>
       <footer className="border-t border-line py-4 text-center text-xs text-muted">
-        Reto AgroCebada FIRA 2026 · Modelo {modelo.nombre} v{modelo.version} · Datos al {modelo.generado}
+        CebadaVision · Datos al {modelo.generado}
       </footer>
     </div>
   )
