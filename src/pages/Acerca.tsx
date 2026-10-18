@@ -75,7 +75,7 @@ export default function Acerca() {
       <Card titulo="Equipo CebadaVision">
         <ul className="space-y-1 text-sm text-ink-2">
           <li>Osmar Javier Hernández Prado</li>
-          <li>David Cárcamo Bonifacio</li>
+          <li>David Carcamo Bonifacio</li>
           <li>David Cervantes Rojas</li>
           {/* TODO: completar apellidos de Hugo e Isaac antes del despliegue final */}
           <li>Hugo</li>
