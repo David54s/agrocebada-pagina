@@ -128,7 +128,7 @@ export default function Parcela() {
         </Card>
       )}
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className={`grid gap-4 ${modo === 'analista' || !p.factores?.length ? 'lg:grid-cols-2' : ''}`}>
         <Card
           titulo="Vigor del cultivo a lo largo del ciclo"
           subtitulo={
@@ -148,20 +148,24 @@ export default function Parcela() {
           )}
         </Card>
 
-        <Card
-          titulo={modo === 'productor' ? 'Qué pasaría si cambiara cada condición' : 'Aporte de cada variable (simulador)'}
-          subtitulo={
-            modo === 'productor'
-              ? 'Comparado con una parcela promedio de la región, según el simulador.'
-              : 'Descomposición del simulador lineal sustituto: coef × (x − media) / std, en t/ha.'
-          }
-        >
-          {aportes ? (
-            <Contribuciones items={aportes} />
-          ) : (
-            <p className="text-sm text-ink-2">Faltan variables del simulador en esta parcela.</p>
-          )}
-        </Card>
+        {/* En modo productor la explicación válida es la del modelo (SHAP, arriba); el desglose del
+            simulador sustituto solo se muestra al analista, o si la parcela no trae factores. */}
+        {(modo === 'analista' || !p.factores?.length) && (
+          <Card
+            titulo={modo === 'productor' ? 'Qué pasaría si cambiara cada condición' : 'Aporte de cada variable (simulador)'}
+            subtitulo={
+              modo === 'productor'
+                ? 'Comparado con una parcela promedio de la región, según el simulador.'
+                : 'Descomposición del simulador lineal sustituto: coef × (x − media) / std, en t/ha. Puede diferir de los factores SHAP del modelo.'
+            }
+          >
+            {aportes ? (
+              <Contribuciones items={aportes} />
+            ) : (
+              <p className="text-sm text-ink-2">Faltan variables del simulador en esta parcela.</p>
+            )}
+          </Card>
+        )}
       </div>
 
       <Card titulo="Condiciones de la parcela" subtitulo={`Comparadas con el promedio de las parcelas de ${p.estado}.`}>

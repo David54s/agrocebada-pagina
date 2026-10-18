@@ -155,9 +155,10 @@ export default function Simulador() {
             <output className="block text-5xl font-semibold" aria-live="polite">
               {num(pred, 2)} <span className="text-xl font-normal text-ink-2">t/ha</span>
             </output>
-            {sim.rmse !== undefined && (
-              <div className="mt-1 text-sm text-ink-2">± {num(sim.rmse, 2)} t/ha de error típico</div>
-            )}
+            <div className="mt-1 text-sm text-ink-2">
+              ± {num(modelo.metricas.rmse, 1)} t/ha de error típico del modelo
+              {sim.rmse ? ` · el simulador aproxima al modelo con ±${num(sim.rmse, 2)} t/ha` : ''}
+            </div>
             <div className="mt-3">
               <Semaforo valor={pred} umbrales={modelo.umbrales} conConsejo={modo === 'productor'} />
             </div>

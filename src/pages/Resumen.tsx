@@ -122,7 +122,7 @@ export default function Resumen() {
         <Card titulo="¿Cómo funciona?">
           <ol className="grid gap-4 text-sm sm:grid-cols-3">
             {[
-              ['Observamos desde el espacio', 'Satélites como Sentinel-2 miden qué tan verde y vigoroso está el cultivo cada pocos días.'],
+              ['Observamos desde el espacio', 'Satélites (Planet y Sentinel-2) miden qué tan verde y vigoroso está el cultivo casi a diario: cuándo emergió, cuánto duró verde y qué tan rápido se secó.'],
               ['Sumamos clima y terreno', 'Lluvia, temperatura, altura y pendiente de cada parcela influyen en la cosecha.'],
               ['El modelo aprende y estima', `Con ${parcelas.length - porPredecir.length} parcelas cuyo rendimiento conocemos, el modelo aprende y estima el de las demás.`],
             ].map(([t, d], i) => (

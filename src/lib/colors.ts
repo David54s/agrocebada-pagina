@@ -7,8 +7,11 @@ export const COLOR_ESTADO: Record<Estado, string> = {
   Puebla: 'var(--series-3)',
 }
 
-/** Rampa secuencial azul (un solo tono, claro → oscuro) para el rendimiento en el mapa. */
-const RAMPA = ['#b7d3f6', '#86b6ef', '#5598e7', '#2a78d6', '#1c5cab', '#104281']
+/**
+ * Rampa secuencial amarillo → verde para el rendimiento en el mapa: contrasta con el fondo
+ * azul-verde de OSM y sigue la lectura natural "más verde = más cosecha".
+ */
+const RAMPA = ['#fff1a8', '#d8e48a', '#a3cf6e', '#63b35a', '#2f8a43', '#145c2c']
 
 export interface Clases {
   cortes: number[] // límites internos, cortes.length = colores.length - 1
