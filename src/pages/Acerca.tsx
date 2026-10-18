@@ -72,10 +72,15 @@ export default function Acerca() {
         </p>
       </Card>
 
-      <Card titulo="Equipo">
-        <p className="text-sm text-ink-2">
-          Integrantes, roles y uso de herramientas de inteligencia artificial: ver anexos del reporte técnico.
-        </p>
+      <Card titulo="Equipo CebadaVision">
+        <ul className="space-y-1 text-sm text-ink-2">
+          <li>Osmar Javier Hernández Prado</li>
+          <li>David Cárcamo Bonifacio</li>
+          <li>David Cervantes Rojas</li>
+          {/* TODO: completar apellidos de Hugo e Isaac antes del despliegue final */}
+          <li>Hugo</li>
+          <li>Isaac</li>
+        </ul>
       </Card>
     </div>
   )
