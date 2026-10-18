@@ -37,7 +37,7 @@ export default function Layout() {
           <NavLink to="/" className="flex items-center gap-2 font-semibold">
             <img src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" className="size-7" />
             <span>
-              AgroCebada <span className="font-normal text-ink-2">· FIRA 2026</span>
+              CebadaVision <span className="font-normal text-ink-2">· Reto AgroCebada FIRA 2026</span>
             </span>
           </NavLink>
           <nav aria-label="Principal" className="order-3 -mx-4 w-full overflow-x-auto px-4 md:order-none md:mx-0 md:w-auto md:px-0">

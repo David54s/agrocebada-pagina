@@ -136,7 +136,10 @@ export default function Modelo() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <Card titulo="Importancia de variables" subtitulo="Participación relativa en la predicción.">
+        <Card
+          titulo="Importancia de variables"
+          subtitulo="Importancia por permutación (aumento del RMSE al barajar cada variable), normalizada a 100 %."
+        >
           <BarList
             items={imp.map((i) => ({
               clave: i.variable,
@@ -179,10 +182,19 @@ export default function Modelo() {
         </Card>
       </div>
 
-      <Card titulo="Preguntas guía del reto" subtitulo="Respuestas calculadas a partir de las salidas del modelo.">
+      <Card
+        titulo="Preguntas guía del reto"
+        subtitulo={
+          modelo.preguntas_guia
+            ? 'Respuestas del equipo de modelación, con la evidencia de la validación cruzada.'
+            : 'Respuestas calculadas a partir de las salidas del modelo.'
+        }
+      >
         <div className="grid gap-4 md:grid-cols-3">
           <Pregunta n={1} q="¿Qué índice es más importante en la predicción?">
-            {mejorIndice ? (
+            {modelo.preguntas_guia ? (
+              <Respuesta r={modelo.preguntas_guia.indice} />
+            ) : mejorIndice ? (
               <>
                 <strong>{etiqueta(mejorIndice.variable)}</strong>, con {pct(mejorIndice.rel)} de la importancia total. Los
                 índices de vegetación en conjunto suman {pct(porGrupo.find((x) => x.g === 'indice')?.rel ?? 0)}.
@@ -192,7 +204,9 @@ export default function Modelo() {
             )}
           </Pregunta>
           <Pregunta n={2} q="¿Qué variable climática tiene mayor peso?">
-            {mejorClima ? (
+            {modelo.preguntas_guia ? (
+              <Respuesta r={modelo.preguntas_guia.clima} />
+            ) : mejorClima ? (
               <>
                 <strong>{etiqueta(mejorClima.variable)}</strong>, con {pct(mejorClima.rel)} de la importancia. Es coherente
                 con que todas las parcelas sean de temporal.
@@ -202,7 +216,9 @@ export default function Modelo() {
             )}
           </Pregunta>
           <Pregunta n={3} q="¿Qué combinación de variables funciona mejor?">
-            {mejorCombo ? (
+            {modelo.preguntas_guia ? (
+              <Respuesta r={modelo.preguntas_guia.combinacion} />
+            ) : mejorCombo ? (
               <>
                 <strong>{mejorCombo.nombre}</strong>: RMSE {num(mejorCombo.rmse, 3)} t/ha y R² {num(mejorCombo.r2, 3)}.
                 {combos.length > 1 &&
@@ -218,6 +234,15 @@ export default function Modelo() {
         </div>
       </Card>
     </div>
+  )
+}
+
+function Respuesta({ r }: { r: { respuesta: string; detalle: string } }) {
+  return (
+    <>
+      <strong>{r.respuesta}.</strong>
+      {r.detalle && <span className="mt-1 block text-xs text-muted">{r.detalle}</span>}
+    </>
   )
 }
 

@@ -100,6 +100,34 @@ export default function Parcela() {
         <ParcelMap parcelas={[parcela]} seleccionada={p.id} className="h-64 lg:h-auto lg:min-h-64" enfocarSeleccion />
       </div>
 
+      {p.nota && (
+        <Card
+          titulo="¿Cómo se llegó a este número?"
+          subtitulo={
+            modo === 'productor'
+              ? 'Explicación en palabras sencillas, calculada para esta parcela.'
+              : 'Contribuciones SHAP del ensamble, agrupadas por tipo de variable.'
+          }
+        >
+          <p className="text-sm text-ink">{p.nota}</p>
+          {p.factores && p.factores.length > 0 && (
+            <ul className="mt-3 grid gap-1.5 text-sm sm:grid-cols-2">
+              {p.factores.map((f) => (
+                <li key={f.variable} className="flex items-baseline justify-between gap-3 border-b border-line pb-1">
+                  <span className="text-ink-2">{f.etiqueta}</span>
+                  <span
+                    className="tabular font-medium"
+                    style={{ color: f.aporte >= 0 ? 'var(--good-text)' : 'var(--critical-text)' }}
+                  >
+                    {signo(f.aporte)} t/ha
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Card>
+      )}
+
       <div className="grid gap-4 lg:grid-cols-2">
         <Card
           titulo="Vigor del cultivo a lo largo del ciclo"
@@ -121,11 +149,11 @@ export default function Parcela() {
         </Card>
 
         <Card
-          titulo={modo === 'productor' ? '¿Por qué esta estimación?' : 'Aporte de cada variable'}
+          titulo={modo === 'productor' ? 'Qué pasaría si cambiara cada condición' : 'Aporte de cada variable (simulador)'}
           subtitulo={
             modo === 'productor'
-              ? 'Comparado con una parcela promedio de la región.'
-              : 'Descomposición del modelo lineal: coef × (x − media) / std, en t/ha.'
+              ? 'Comparado con una parcela promedio de la región, según el simulador.'
+              : 'Descomposición del simulador lineal sustituto: coef × (x − media) / std, en t/ha.'
           }
         >
           {aportes ? (

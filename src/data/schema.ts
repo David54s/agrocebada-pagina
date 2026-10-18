@@ -50,6 +50,12 @@ const parcelaPropsBase = z.looseObject({
   pred_lo: finito,
   pred_hi: finito,
   prediccion_cv: finito.nullable().default(null),
+  /** Explicación en lenguaje llano de cómo se llegó al número (la escribe el exportador). */
+  nota: z.string().optional(),
+  /** Aporte (t/ha) de los factores que más pesaron en esta parcela (valores SHAP del modelo). */
+  factores: z
+    .array(z.object({ variable: z.string(), etiqueta: z.string(), aporte: finito }))
+    .optional(),
 })
 
 export const parcelaPropsSchema = z.preprocess(normalizarId, parcelaPropsBase)
@@ -131,6 +137,14 @@ export const modeloSchema = z.object({
   umbrales: z
     .object({ bajo: finito, alto: finito })
     .refine((u) => u.bajo < u.alto, 'umbrales.bajo debe ser menor que umbrales.alto'),
+  /** Respuestas a las preguntas guía del reto, redactadas por el equipo de modelación. */
+  preguntas_guia: z
+    .object({
+      indice: z.object({ respuesta: z.string(), detalle: z.string().default('') }),
+      clima: z.object({ respuesta: z.string(), detalle: z.string().default('') }),
+      combinacion: z.object({ respuesta: z.string(), detalle: z.string().default('') }),
+    })
+    .optional(),
 })
 
 export type ParcelaProps = z.infer<typeof parcelaPropsSchema>

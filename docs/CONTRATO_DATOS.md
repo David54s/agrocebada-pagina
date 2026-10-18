@@ -40,6 +40,8 @@ gdf.to_file("public/data/parcelas.geojson", driver="GeoJSON")
 | `pred_lo`, `pred_hi` | número | Límites del intervalo de predicción (el nivel va en `modelo.json → intervalo`). |
 | `prediccion_cv` | número \| `null` | Predicción **fuera de muestra** (out-of-fold) para entrenamiento; `null` en predicción. Alimenta la gráfica observado vs. predicho. |
 | *una propiedad por variable* | número | Cada variable listada en `modelo.json → variables` (ej. `ndvi_max`, `precip_total`). |
+| `nota` | texto | Opcional. Explicación en lenguaje llano de cómo se llegó al número (la ficha la muestra tal cual). |
+| `factores` | lista | Opcional. `[{ "variable", "etiqueta", "aporte" }]`: factores que más pesaron en esta parcela, con su aporte en t/ha (SHAP). |
 
 Si no tienen un intervalo propio, una aproximación válida es `pred ± 1.28 · RMSE_cv` (≈ 80 %).
 
@@ -75,7 +77,12 @@ Si no tienen un intervalo propio, una aproximación válida es `pred ± 1.28 · 
       { "nombre": "ndvi_max", "coef": 0.21, "media": 0.66, "std": 0.07, "min": 0.4, "max": 0.9 }
     ]
   },
-  "umbrales": { "bajo": 2.5, "alto": 3.5 } // t/ha del semáforo bajo / medio / alto
+  "umbrales": { "bajo": 2.5, "alto": 3.5 }, // t/ha del semáforo bajo / medio / alto
+  "preguntas_guia": {                       // opcional: si viene, la página Modelo muestra estas respuestas
+    "indice": { "respuesta": "EVI (Planet)", "detalle": "..." },
+    "clima": { "respuesta": "Precipitación del ciclo", "detalle": "..." },
+    "combinacion": { "respuesta": "Ubicación + relieve + clima + fenología", "detalle": "..." }
+  }
 }
 ```
 

@@ -1,31 +1,31 @@
 {
-  "nombre": "Ridge (provisional)",
-  "version": "0.2.0",
-  "generado": "2026-10-11",
+  "nombre": "CebadaVision · ensamble LightGBM + Random Forest",
+  "version": "1.0.0",
+  "generado": "2026-10-17",
   "es_mock": false,
-  "descripcion": "Modelo provisional: regresión ridge con índices de Planet, clima y relieve. Se reemplazará por el modelo final del equipo.",
+  "descripcion": "Promedio de dos modelos de árboles: LightGBM con ubicación (rendimiento de parcelas vecinas, zona, coordenadas), relieve y clima; y Random Forest que además usa la fenología de los índices de Planet (NDVI, EVI, LAI, MSAVI). Validado con 5 folds estratificados por estado, repetidos 10 veces.",
   "intervalo": "Intervalo de predicción al 80 % (± 1.28 · RMSE de validación cruzada)",
   "variables": [
     {
-      "nombre": "ndvi_max",
-      "etiqueta": "NDVI máximo",
-      "unidad": "",
-      "grupo": "indice",
-      "descripcion": "Qué tan verde y vigoroso estuvo el cultivo en su mejor momento."
+      "nombre": "vecinos_knn",
+      "etiqueta": "Cosecha de parcelas vecinas",
+      "unidad": "t/ha",
+      "grupo": "otra",
+      "descripcion": "Promedio del rendimiento reportado en las 8 parcelas más cercanas. Es la referencia más fuerte: parcelas vecinas comparten suelo, clima y manejo."
     },
     {
-      "nombre": "evi_max",
-      "etiqueta": "EVI máximo",
-      "unidad": "",
-      "grupo": "indice",
-      "descripcion": "Vigor del cultivo, menos sensible al suelo desnudo y a la atmósfera."
+      "nombre": "elev_mean",
+      "etiqueta": "Elevación",
+      "unidad": "m",
+      "grupo": "geofisica",
+      "descripcion": "Altura de la parcela sobre el nivel del mar."
     },
     {
-      "nombre": "lai_max",
-      "etiqueta": "LAI máximo",
-      "unidad": "m²/m²",
-      "grupo": "indice",
-      "descripcion": "Cuánta hoja cubrió el suelo en el mejor momento del ciclo."
+      "nombre": "pend_mean",
+      "etiqueta": "Pendiente",
+      "unidad": "°",
+      "grupo": "geofisica",
+      "descripcion": "Qué tan inclinado es el terreno."
     },
     {
       "nombre": "prec_abr_oct",
@@ -56,256 +56,1160 @@
       "descripcion": "Promedio de las temperaturas más altas del día durante el ciclo."
     },
     {
-      "nombre": "elev_mean",
-      "etiqueta": "Elevación",
-      "unidad": "m",
-      "grupo": "geofisica",
-      "descripcion": "Altura de la parcela sobre el nivel del mar."
+      "nombre": "planet_evi_may_jun",
+      "etiqueta": "Vigor en mayo-junio (EVI)",
+      "unidad": "",
+      "grupo": "indice",
+      "descripcion": "Qué tan verde se veía la parcela desde el satélite al inicio del ciclo (emergencia)."
     },
     {
-      "nombre": "pend_mean",
-      "etiqueta": "Pendiente",
-      "unidad": "°",
-      "grupo": "geofisica",
-      "descripcion": "Qué tan inclinado es el terreno."
+      "nombre": "planet_evi_pico",
+      "etiqueta": "Vigor máximo (EVI)",
+      "unidad": "",
+      "grupo": "indice",
+      "descripcion": "El verdor más alto del ciclo, normalmente en agosto-septiembre."
+    },
+    {
+      "nombre": "planet_lai_auc_abr_oct",
+      "etiqueta": "Hoja acumulada en el ciclo (LAI)",
+      "unidad": "",
+      "grupo": "indice",
+      "descripcion": "Cuánta hoja mantuvo el cultivo a lo largo de todo el ciclo (área bajo la curva)."
+    },
+    {
+      "nombre": "planet_evi_duracion",
+      "etiqueta": "Duración de la temporada verde",
+      "unidad": "días",
+      "grupo": "indice",
+      "descripcion": "Días entre que el cultivo emergió y que empezó a secarse."
     }
   ],
   "metricas": {
-    "rmse": 0.5512,
-    "mae": 0.4175,
-    "r2": 0.5775,
-    "validacion": "CV de 5 folds estratificada por estado (semilla 42)",
+    "rmse": 0.4913,
+    "mae": 0.3356,
+    "r2": 0.6644,
+    "rmse_sd": 0.0071,
+    "validacion": "CV de 5 folds estratificada por estado, 10 repeticiones (media de vecinos calculada dentro de cada fold)",
     "por_estado": [
       {
         "estado": "Hidalgo",
         "n": 36,
-        "rmse": 0.5133,
-        "mae": 0.403,
-        "r2": 0.5519
+        "rmse": 0.3567,
+        "mae": 0.2491,
+        "r2": 0.7836
       },
       {
         "estado": "Puebla",
         "n": 71,
-        "rmse": 0.6043,
-        "mae": 0.44,
-        "r2": -0.0844
+        "rmse": 0.5783,
+        "mae": 0.3885,
+        "r2": 0.0066
       },
       {
         "estado": "Tlaxcala",
         "n": 31,
-        "rmse": 0.4589,
-        "mae": 0.383,
-        "r2": -0.5388
+        "rmse": 0.3747,
+        "mae": 0.2936,
+        "r2": -0.0262
       }
-    ]
+    ],
+    "municipio": {
+      "rmse": 0.5737,
+      "mae": 0.4242,
+      "r2": 0.5424
+    },
+    "referencias": {
+      "media_global": {
+        "rmse": 0.851,
+        "mae": 0.751,
+        "r2": -0.018
+      },
+      "knn_espacial": {
+        "rmse": 0.506,
+        "r2": 0.644
+      },
+      "ridge_provisional": {
+        "rmse": 0.551,
+        "r2": 0.578
+      }
+    }
   },
   "importancias": [
     {
-      "variable": "tmin_media_abr_oct",
-      "importancia": 0.47
-    },
-    {
-      "variable": "prec_anomalia",
-      "importancia": 0.3405
-    },
-    {
-      "variable": "tmax_media_abr_oct",
-      "importancia": 0.1972
-    },
-    {
-      "variable": "ndvi_max",
-      "importancia": 0.1672
-    },
-    {
-      "variable": "pend_mean",
-      "importancia": 0.0941
-    },
-    {
-      "variable": "lai_max",
-      "importancia": 0.0817
-    },
-    {
-      "variable": "evi_max",
-      "importancia": 0.0712
+      "variable": "vecinos_knn",
+      "importancia": 0.46
     },
     {
       "variable": "elev_mean",
-      "importancia": 0.0332
+      "importancia": 0.0158
+    },
+    {
+      "variable": "pend_mean",
+      "importancia": 0.0194
     },
     {
       "variable": "prec_abr_oct",
-      "importancia": 0.0208
+      "importancia": 0.0036
+    },
+    {
+      "variable": "prec_anomalia",
+      "importancia": 0.0029
+    },
+    {
+      "variable": "tmin_media_abr_oct",
+      "importancia": 0.0143
+    },
+    {
+      "variable": "tmax_media_abr_oct",
+      "importancia": 0.0044
+    },
+    {
+      "variable": "planet_evi_may_jun",
+      "importancia": 0.0014
+    },
+    {
+      "variable": "planet_evi_pico",
+      "importancia": 0.0011
+    },
+    {
+      "variable": "planet_lai_auc_abr_oct",
+      "importancia": 0.0003
+    },
+    {
+      "variable": "planet_evi_duracion",
+      "importancia": 0.0014
     }
   ],
+  "importancias_todas": [
+    {
+      "variable": "vecinos_knn",
+      "etiqueta": "Cosecha de parcelas vecinas",
+      "importancia": 0.46
+    },
+    {
+      "variable": "media_zona",
+      "etiqueta": "Promedio de su zona",
+      "importancia": 0.2947
+    },
+    {
+      "variable": "x_km",
+      "etiqueta": "Posición este-oeste",
+      "importancia": 0.2403
+    },
+    {
+      "variable": "y_km",
+      "etiqueta": "Posición norte-sur",
+      "importancia": 0.0299
+    },
+    {
+      "variable": "elev_std",
+      "etiqueta": "Variación de elevación",
+      "importancia": 0.0206
+    },
+    {
+      "variable": "pend_mean",
+      "etiqueta": "Pendiente",
+      "importancia": 0.0194
+    },
+    {
+      "variable": "elev_mean",
+      "etiqueta": "Elevación",
+      "importancia": 0.0158
+    },
+    {
+      "variable": "tmin_media_abr_oct",
+      "etiqueta": "Temperatura mínima media",
+      "importancia": 0.0143
+    },
+    {
+      "variable": "tmax_media_abr_oct",
+      "etiqueta": "Temperatura máxima media",
+      "importancia": 0.0044
+    },
+    {
+      "variable": "planet_evi_pend_bajada",
+      "etiqueta": "EVI: velocidad de secado",
+      "importancia": 0.0043
+    },
+    {
+      "variable": "planet_evi_m05",
+      "etiqueta": "EVI en may",
+      "importancia": 0.0037
+    },
+    {
+      "variable": "prec_abr_oct",
+      "etiqueta": "Lluvia abril-octubre",
+      "importancia": 0.0036
+    },
+    {
+      "variable": "prec_anomalia",
+      "etiqueta": "Lluvia vs. años anteriores",
+      "importancia": 0.0029
+    },
+    {
+      "variable": "planet_msavi_pend_bajada",
+      "etiqueta": "MSAVI: velocidad de secado",
+      "importancia": 0.0025
+    },
+    {
+      "variable": "planet_msavi_m05",
+      "etiqueta": "MSAVI en may",
+      "importancia": 0.0023
+    },
+    {
+      "variable": "planet_evi_m07",
+      "etiqueta": "EVI en jul",
+      "importancia": 0.0019
+    },
+    {
+      "variable": "planet_ndvi_m11",
+      "etiqueta": "NDVI en nov",
+      "importancia": 0.0019
+    },
+    {
+      "variable": "planet_ndvi_pend_subida",
+      "etiqueta": "NDVI: velocidad de crecimiento",
+      "importancia": 0.0018
+    },
+    {
+      "variable": "planet_lai_m05",
+      "etiqueta": "LAI en may",
+      "importancia": 0.0016
+    },
+    {
+      "variable": "planet_lai_pend_subida",
+      "etiqueta": "LAI: velocidad de crecimiento",
+      "importancia": 0.0016
+    },
+    {
+      "variable": "planet_lai_m11",
+      "etiqueta": "LAI en nov",
+      "importancia": 0.0015
+    },
+    {
+      "variable": "planet_msavi_m06",
+      "etiqueta": "MSAVI en jun",
+      "importancia": 0.0015
+    },
+    {
+      "variable": "planet_evi_may_jun",
+      "etiqueta": "Vigor en mayo-junio (EVI)",
+      "importancia": 0.0014
+    },
+    {
+      "variable": "planet_evi_duracion",
+      "etiqueta": "Duración de la temporada verde",
+      "importancia": 0.0014
+    },
+    {
+      "variable": "planet_ndvi_jul_sep",
+      "etiqueta": "NDVI: julio-septiembre",
+      "importancia": 0.0014
+    },
+    {
+      "variable": "planet_msavi_may_jun",
+      "etiqueta": "MSAVI: mayo-junio",
+      "importancia": 0.0013
+    },
+    {
+      "variable": "planet_msavi_duracion",
+      "etiqueta": "MSAVI: duración verde",
+      "importancia": 0.0012
+    },
+    {
+      "variable": "planet_ndvi_duracion",
+      "etiqueta": "NDVI: duración verde",
+      "importancia": 0.0011
+    },
+    {
+      "variable": "planet_evi_pico",
+      "etiqueta": "Vigor máximo (EVI)",
+      "importancia": 0.0011
+    },
+    {
+      "variable": "planet_evi_m09",
+      "etiqueta": "EVI en sep",
+      "importancia": 0.0011
+    },
+    {
+      "variable": "planet_evi_m11",
+      "etiqueta": "EVI en nov",
+      "importancia": 0.0011
+    },
+    {
+      "variable": "planet_ndvi_doy_inicio",
+      "etiqueta": "NDVI: fecha de emergencia",
+      "importancia": 0.0011
+    },
+    {
+      "variable": "planet_msavi_m09",
+      "etiqueta": "MSAVI en sep",
+      "importancia": 0.001
+    },
+    {
+      "variable": "planet_msavi_m04",
+      "etiqueta": "MSAVI en abr",
+      "importancia": 0.001
+    },
+    {
+      "variable": "planet_lai_m10",
+      "etiqueta": "LAI en oct",
+      "importancia": 0.001
+    },
+    {
+      "variable": "planet_msavi_m08",
+      "etiqueta": "MSAVI en ago",
+      "importancia": 0.001
+    },
+    {
+      "variable": "planet_evi_pend_subida",
+      "etiqueta": "EVI: velocidad de crecimiento",
+      "importancia": 0.001
+    },
+    {
+      "variable": "planet_ndvi_pend_bajada",
+      "etiqueta": "NDVI: velocidad de secado",
+      "importancia": 0.001
+    },
+    {
+      "variable": "planet_lai_duracion",
+      "etiqueta": "LAI: duración verde",
+      "importancia": 0.0009
+    },
+    {
+      "variable": "planet_ndvi_m05",
+      "etiqueta": "NDVI en may",
+      "importancia": 0.0009
+    },
+    {
+      "variable": "planet_ndvi_amplitud",
+      "etiqueta": "NDVI: amplitud",
+      "importancia": 0.0009
+    },
+    {
+      "variable": "planet_evi_m08",
+      "etiqueta": "EVI en ago",
+      "importancia": 0.0009
+    },
+    {
+      "variable": "planet_evi_doy_pico",
+      "etiqueta": "EVI: fecha del máximo",
+      "importancia": 0.0009
+    },
+    {
+      "variable": "planet_lai_may_jun",
+      "etiqueta": "LAI: mayo-junio",
+      "importancia": 0.0009
+    },
+    {
+      "variable": "planet_msavi_m11",
+      "etiqueta": "MSAVI en nov",
+      "importancia": 0.0009
+    },
+    {
+      "variable": "planet_lai_oct_nov",
+      "etiqueta": "LAI: octubre-noviembre",
+      "importancia": 0.0009
+    },
+    {
+      "variable": "planet_ndvi_may_jun",
+      "etiqueta": "NDVI: mayo-junio",
+      "importancia": 0.0009
+    },
+    {
+      "variable": "planet_ndvi_m07",
+      "etiqueta": "NDVI en jul",
+      "importancia": 0.0008
+    },
+    {
+      "variable": "planet_evi_m04",
+      "etiqueta": "EVI en abr",
+      "importancia": 0.0008
+    },
+    {
+      "variable": "planet_ndvi_m08",
+      "etiqueta": "NDVI en ago",
+      "importancia": 0.0008
+    },
+    {
+      "variable": "planet_lai_pend_bajada",
+      "etiqueta": "LAI: velocidad de secado",
+      "importancia": 0.0008
+    },
+    {
+      "variable": "planet_lai_jul_sep",
+      "etiqueta": "LAI: julio-septiembre",
+      "importancia": 0.0008
+    },
+    {
+      "variable": "planet_msavi_doy_pico",
+      "etiqueta": "MSAVI: fecha del máximo",
+      "importancia": 0.0007
+    },
+    {
+      "variable": "planet_evi_amplitud",
+      "etiqueta": "EVI: amplitud",
+      "importancia": 0.0007
+    },
+    {
+      "variable": "planet_evi_m06",
+      "etiqueta": "EVI en jun",
+      "importancia": 0.0007
+    },
+    {
+      "variable": "planet_msavi_m10",
+      "etiqueta": "MSAVI en oct",
+      "importancia": 0.0007
+    },
+    {
+      "variable": "planet_evi_jul_sep",
+      "etiqueta": "EVI: julio-septiembre",
+      "importancia": 0.0006
+    },
+    {
+      "variable": "planet_msavi_m07",
+      "etiqueta": "MSAVI en jul",
+      "importancia": 0.0006
+    },
+    {
+      "variable": "planet_lai_amplitud",
+      "etiqueta": "LAI: amplitud",
+      "importancia": 0.0006
+    },
+    {
+      "variable": "planet_ndvi_m10",
+      "etiqueta": "NDVI en oct",
+      "importancia": 0.0006
+    },
+    {
+      "variable": "planet_msavi_oct_nov",
+      "etiqueta": "MSAVI: octubre-noviembre",
+      "importancia": 0.0006
+    },
+    {
+      "variable": "planet_msavi_pend_subida",
+      "etiqueta": "MSAVI: velocidad de crecimiento",
+      "importancia": 0.0006
+    },
+    {
+      "variable": "planet_ndvi_doy_fin",
+      "etiqueta": "NDVI: fecha de secado",
+      "importancia": 0.0006
+    },
+    {
+      "variable": "planet_lai_m08",
+      "etiqueta": "LAI en ago",
+      "importancia": 0.0006
+    },
+    {
+      "variable": "planet_ndvi_pico",
+      "etiqueta": "NDVI: máximo",
+      "importancia": 0.0006
+    },
+    {
+      "variable": "planet_msavi_doy_fin",
+      "etiqueta": "MSAVI: fecha de secado",
+      "importancia": 0.0005
+    },
+    {
+      "variable": "planet_lai_m09",
+      "etiqueta": "LAI en sep",
+      "importancia": 0.0005
+    },
+    {
+      "variable": "planet_ndvi_m04",
+      "etiqueta": "NDVI en abr",
+      "importancia": 0.0005
+    },
+    {
+      "variable": "planet_lai_doy_fin",
+      "etiqueta": "LAI: fecha de secado",
+      "importancia": 0.0005
+    },
+    {
+      "variable": "planet_evi_doy_fin",
+      "etiqueta": "EVI: fecha de secado",
+      "importancia": 0.0004
+    },
+    {
+      "variable": "planet_evi_auc_abr_oct",
+      "etiqueta": "EVI: acumulado del ciclo",
+      "importancia": 0.0004
+    },
+    {
+      "variable": "planet_lai_m04",
+      "etiqueta": "LAI en abr",
+      "importancia": 0.0004
+    },
+    {
+      "variable": "planet_ndvi_auc_abr_oct",
+      "etiqueta": "NDVI: acumulado del ciclo",
+      "importancia": 0.0004
+    },
+    {
+      "variable": "planet_msavi_auc_abr_oct",
+      "etiqueta": "MSAVI: acumulado del ciclo",
+      "importancia": 0.0004
+    },
+    {
+      "variable": "planet_msavi_amplitud",
+      "etiqueta": "MSAVI: amplitud",
+      "importancia": 0.0003
+    },
+    {
+      "variable": "planet_lai_auc_abr_oct",
+      "etiqueta": "Hoja acumulada en el ciclo (LAI)",
+      "importancia": 0.0003
+    },
+    {
+      "variable": "planet_lai_pico",
+      "etiqueta": "LAI: máximo",
+      "importancia": 0.0003
+    },
+    {
+      "variable": "planet_lai_m07",
+      "etiqueta": "LAI en jul",
+      "importancia": 0.0003
+    },
+    {
+      "variable": "planet_evi_m10",
+      "etiqueta": "EVI en oct",
+      "importancia": 0.0003
+    },
+    {
+      "variable": "planet_ndvi_m06",
+      "etiqueta": "NDVI en jun",
+      "importancia": 0.0003
+    },
+    {
+      "variable": "planet_lai_m06",
+      "etiqueta": "LAI en jun",
+      "importancia": 0.0003
+    },
+    {
+      "variable": "planet_evi_oct_nov",
+      "etiqueta": "EVI: octubre-noviembre",
+      "importancia": 0.0003
+    },
+    {
+      "variable": "planet_lai_doy_inicio",
+      "etiqueta": "LAI: fecha de emergencia",
+      "importancia": 0.0003
+    },
+    {
+      "variable": "planet_ndvi_m09",
+      "etiqueta": "NDVI en sep",
+      "importancia": 0.0003
+    },
+    {
+      "variable": "planet_msavi_jul_sep",
+      "etiqueta": "MSAVI: julio-septiembre",
+      "importancia": 0.0002
+    },
+    {
+      "variable": "planet_msavi_pico",
+      "etiqueta": "MSAVI: máximo",
+      "importancia": 0.0002
+    },
+    {
+      "variable": "planet_msavi_doy_inicio",
+      "etiqueta": "MSAVI: fecha de emergencia",
+      "importancia": 0.0002
+    },
+    {
+      "variable": "planet_lai_doy_pico",
+      "etiqueta": "LAI: fecha del máximo",
+      "importancia": 0.0002
+    },
+    {
+      "variable": "planet_ndvi_oct_nov",
+      "etiqueta": "NDVI: octubre-noviembre",
+      "importancia": 0.0002
+    },
+    {
+      "variable": "planet_ndvi_doy_pico",
+      "etiqueta": "NDVI: fecha del máximo",
+      "importancia": 0.0002
+    },
+    {
+      "variable": "planet_evi_doy_inicio",
+      "etiqueta": "EVI: fecha de emergencia",
+      "importancia": 0.0001
+    }
+  ],
+  "importancias_grupo": {
+    "ubicacion": 1.0248,
+    "relieve": 0.0557,
+    "clima": 0.0253,
+    "indice_evi": 0.0232,
+    "indice_msavi": 0.0178,
+    "indice_ndvi": 0.0161,
+    "indice_lai": 0.0142
+  },
   "combinaciones": [
     {
-      "nombre": "Solo índices",
+      "nombre": "Solo ubicación",
       "variables": [
-        "ndvi_max",
-        "evi_max",
-        "lai_max"
+        "media_zona",
+        "vecinos_knn",
+        "x_km",
+        "y_km"
       ],
-      "rmse": 0.8375,
-      "r2": 0.0247
+      "rmse": 0.5024,
+      "r2": 0.6491
+    },
+    {
+      "nombre": "Solo índices (Planet)",
+      "variables": [
+        "planet_evi_amplitud",
+        "planet_evi_auc_abr_oct",
+        "planet_evi_doy_fin",
+        "planet_evi_doy_inicio",
+        "planet_evi_doy_pico",
+        "planet_evi_duracion",
+        "planet_evi_jul_sep",
+        "planet_evi_m04",
+        "planet_evi_m05",
+        "planet_evi_m06",
+        "planet_evi_m07",
+        "planet_evi_m08",
+        "planet_evi_m09",
+        "planet_evi_m10",
+        "planet_evi_m11",
+        "planet_evi_may_jun",
+        "planet_evi_oct_nov",
+        "planet_evi_pend_bajada",
+        "planet_evi_pend_subida",
+        "planet_evi_pico",
+        "planet_lai_amplitud",
+        "planet_lai_auc_abr_oct",
+        "planet_lai_doy_fin",
+        "planet_lai_doy_inicio",
+        "planet_lai_doy_pico",
+        "planet_lai_duracion",
+        "planet_lai_jul_sep",
+        "planet_lai_m04",
+        "planet_lai_m05",
+        "planet_lai_m06",
+        "planet_lai_m07",
+        "planet_lai_m08",
+        "planet_lai_m09",
+        "planet_lai_m10",
+        "planet_lai_m11",
+        "planet_lai_may_jun",
+        "planet_lai_oct_nov",
+        "planet_lai_pend_bajada",
+        "planet_lai_pend_subida",
+        "planet_lai_pico",
+        "planet_msavi_amplitud",
+        "planet_msavi_auc_abr_oct",
+        "planet_msavi_doy_fin",
+        "planet_msavi_doy_inicio",
+        "planet_msavi_doy_pico",
+        "planet_msavi_duracion",
+        "planet_msavi_jul_sep",
+        "planet_msavi_m04",
+        "planet_msavi_m05",
+        "planet_msavi_m06",
+        "planet_msavi_m07",
+        "planet_msavi_m08",
+        "planet_msavi_m09",
+        "planet_msavi_m10",
+        "planet_msavi_m11",
+        "planet_msavi_may_jun",
+        "planet_msavi_oct_nov",
+        "planet_msavi_pend_bajada",
+        "planet_msavi_pend_subida",
+        "planet_msavi_pico",
+        "planet_ndvi_amplitud",
+        "planet_ndvi_auc_abr_oct",
+        "planet_ndvi_doy_fin",
+        "planet_ndvi_doy_inicio",
+        "planet_ndvi_doy_pico",
+        "planet_ndvi_duracion",
+        "planet_ndvi_jul_sep",
+        "planet_ndvi_m04",
+        "planet_ndvi_m05",
+        "planet_ndvi_m06",
+        "planet_ndvi_m07",
+        "planet_ndvi_m08",
+        "planet_ndvi_m09",
+        "planet_ndvi_m10",
+        "planet_ndvi_m11",
+        "planet_ndvi_may_jun",
+        "planet_ndvi_oct_nov",
+        "planet_ndvi_pend_bajada",
+        "planet_ndvi_pend_subida",
+        "planet_ndvi_pico"
+      ],
+      "rmse": 0.6293,
+      "r2": 0.4492
     },
     {
       "nombre": "Solo clima",
       "variables": [
         "prec_abr_oct",
         "prec_anomalia",
-        "tmin_media_abr_oct",
-        "tmax_media_abr_oct"
+        "tmax_media_abr_oct",
+        "tmin_media_abr_oct"
       ],
-      "rmse": 0.5458,
-      "r2": 0.5859
+      "rmse": 0.5371,
+      "r2": 0.5989
     },
     {
       "nombre": "Solo relieve",
       "variables": [
         "elev_mean",
+        "elev_std",
         "pend_mean"
       ],
-      "rmse": 0.8104,
-      "r2": 0.0869
+      "rmse": 0.7544,
+      "r2": 0.2086
     },
     {
-      "nombre": "Índices + clima",
+      "nombre": "Índices + clima + relieve (sin ubicación)",
       "variables": [
-        "ndvi_max",
-        "evi_max",
-        "lai_max",
-        "prec_abr_oct",
-        "prec_anomalia",
-        "tmin_media_abr_oct",
-        "tmax_media_abr_oct"
-      ],
-      "rmse": 0.5453,
-      "r2": 0.5865
-    },
-    {
-      "nombre": "Índices + relieve",
-      "variables": [
-        "ndvi_max",
-        "evi_max",
-        "lai_max",
         "elev_mean",
-        "pend_mean"
-      ],
-      "rmse": 0.7846,
-      "r2": 0.1441
-    },
-    {
-      "nombre": "Clima + relieve",
-      "variables": [
+        "elev_std",
+        "pend_mean",
+        "planet_evi_amplitud",
+        "planet_evi_auc_abr_oct",
+        "planet_evi_doy_fin",
+        "planet_evi_doy_inicio",
+        "planet_evi_doy_pico",
+        "planet_evi_duracion",
+        "planet_evi_jul_sep",
+        "planet_evi_m04",
+        "planet_evi_m05",
+        "planet_evi_m06",
+        "planet_evi_m07",
+        "planet_evi_m08",
+        "planet_evi_m09",
+        "planet_evi_m10",
+        "planet_evi_m11",
+        "planet_evi_may_jun",
+        "planet_evi_oct_nov",
+        "planet_evi_pend_bajada",
+        "planet_evi_pend_subida",
+        "planet_evi_pico",
+        "planet_lai_amplitud",
+        "planet_lai_auc_abr_oct",
+        "planet_lai_doy_fin",
+        "planet_lai_doy_inicio",
+        "planet_lai_doy_pico",
+        "planet_lai_duracion",
+        "planet_lai_jul_sep",
+        "planet_lai_m04",
+        "planet_lai_m05",
+        "planet_lai_m06",
+        "planet_lai_m07",
+        "planet_lai_m08",
+        "planet_lai_m09",
+        "planet_lai_m10",
+        "planet_lai_m11",
+        "planet_lai_may_jun",
+        "planet_lai_oct_nov",
+        "planet_lai_pend_bajada",
+        "planet_lai_pend_subida",
+        "planet_lai_pico",
+        "planet_msavi_amplitud",
+        "planet_msavi_auc_abr_oct",
+        "planet_msavi_doy_fin",
+        "planet_msavi_doy_inicio",
+        "planet_msavi_doy_pico",
+        "planet_msavi_duracion",
+        "planet_msavi_jul_sep",
+        "planet_msavi_m04",
+        "planet_msavi_m05",
+        "planet_msavi_m06",
+        "planet_msavi_m07",
+        "planet_msavi_m08",
+        "planet_msavi_m09",
+        "planet_msavi_m10",
+        "planet_msavi_m11",
+        "planet_msavi_may_jun",
+        "planet_msavi_oct_nov",
+        "planet_msavi_pend_bajada",
+        "planet_msavi_pend_subida",
+        "planet_msavi_pico",
+        "planet_ndvi_amplitud",
+        "planet_ndvi_auc_abr_oct",
+        "planet_ndvi_doy_fin",
+        "planet_ndvi_doy_inicio",
+        "planet_ndvi_doy_pico",
+        "planet_ndvi_duracion",
+        "planet_ndvi_jul_sep",
+        "planet_ndvi_m04",
+        "planet_ndvi_m05",
+        "planet_ndvi_m06",
+        "planet_ndvi_m07",
+        "planet_ndvi_m08",
+        "planet_ndvi_m09",
+        "planet_ndvi_m10",
+        "planet_ndvi_m11",
+        "planet_ndvi_may_jun",
+        "planet_ndvi_oct_nov",
+        "planet_ndvi_pend_bajada",
+        "planet_ndvi_pend_subida",
+        "planet_ndvi_pico",
         "prec_abr_oct",
         "prec_anomalia",
-        "tmin_media_abr_oct",
         "tmax_media_abr_oct",
-        "elev_mean",
-        "pend_mean"
+        "tmin_media_abr_oct"
       ],
-      "rmse": 0.5499,
-      "r2": 0.5795
+      "rmse": 0.5381,
+      "r2": 0.5974
     },
     {
-      "nombre": "Índices + clima + relieve",
+      "nombre": "Ubicación + índices",
       "variables": [
-        "ndvi_max",
-        "evi_max",
-        "lai_max",
+        "media_zona",
+        "planet_evi_amplitud",
+        "planet_evi_auc_abr_oct",
+        "planet_evi_doy_fin",
+        "planet_evi_doy_inicio",
+        "planet_evi_doy_pico",
+        "planet_evi_duracion",
+        "planet_evi_jul_sep",
+        "planet_evi_m04",
+        "planet_evi_m05",
+        "planet_evi_m06",
+        "planet_evi_m07",
+        "planet_evi_m08",
+        "planet_evi_m09",
+        "planet_evi_m10",
+        "planet_evi_m11",
+        "planet_evi_may_jun",
+        "planet_evi_oct_nov",
+        "planet_evi_pend_bajada",
+        "planet_evi_pend_subida",
+        "planet_evi_pico",
+        "planet_lai_amplitud",
+        "planet_lai_auc_abr_oct",
+        "planet_lai_doy_fin",
+        "planet_lai_doy_inicio",
+        "planet_lai_doy_pico",
+        "planet_lai_duracion",
+        "planet_lai_jul_sep",
+        "planet_lai_m04",
+        "planet_lai_m05",
+        "planet_lai_m06",
+        "planet_lai_m07",
+        "planet_lai_m08",
+        "planet_lai_m09",
+        "planet_lai_m10",
+        "planet_lai_m11",
+        "planet_lai_may_jun",
+        "planet_lai_oct_nov",
+        "planet_lai_pend_bajada",
+        "planet_lai_pend_subida",
+        "planet_lai_pico",
+        "planet_msavi_amplitud",
+        "planet_msavi_auc_abr_oct",
+        "planet_msavi_doy_fin",
+        "planet_msavi_doy_inicio",
+        "planet_msavi_doy_pico",
+        "planet_msavi_duracion",
+        "planet_msavi_jul_sep",
+        "planet_msavi_m04",
+        "planet_msavi_m05",
+        "planet_msavi_m06",
+        "planet_msavi_m07",
+        "planet_msavi_m08",
+        "planet_msavi_m09",
+        "planet_msavi_m10",
+        "planet_msavi_m11",
+        "planet_msavi_may_jun",
+        "planet_msavi_oct_nov",
+        "planet_msavi_pend_bajada",
+        "planet_msavi_pend_subida",
+        "planet_msavi_pico",
+        "planet_ndvi_amplitud",
+        "planet_ndvi_auc_abr_oct",
+        "planet_ndvi_doy_fin",
+        "planet_ndvi_doy_inicio",
+        "planet_ndvi_doy_pico",
+        "planet_ndvi_duracion",
+        "planet_ndvi_jul_sep",
+        "planet_ndvi_m04",
+        "planet_ndvi_m05",
+        "planet_ndvi_m06",
+        "planet_ndvi_m07",
+        "planet_ndvi_m08",
+        "planet_ndvi_m09",
+        "planet_ndvi_m10",
+        "planet_ndvi_m11",
+        "planet_ndvi_may_jun",
+        "planet_ndvi_oct_nov",
+        "planet_ndvi_pend_bajada",
+        "planet_ndvi_pend_subida",
+        "planet_ndvi_pico",
+        "vecinos_knn",
+        "x_km",
+        "y_km"
+      ],
+      "rmse": 0.4975,
+      "r2": 0.6558
+    },
+    {
+      "nombre": "Ubicación + clima",
+      "variables": [
+        "media_zona",
         "prec_abr_oct",
         "prec_anomalia",
-        "tmin_media_abr_oct",
         "tmax_media_abr_oct",
-        "elev_mean",
-        "pend_mean"
+        "tmin_media_abr_oct",
+        "vecinos_knn",
+        "x_km",
+        "y_km"
       ],
-      "rmse": 0.5512,
-      "r2": 0.5775
+      "rmse": 0.507,
+      "r2": 0.6425
+    },
+    {
+      "nombre": "Ubicación + relieve",
+      "variables": [
+        "elev_mean",
+        "elev_std",
+        "media_zona",
+        "pend_mean",
+        "vecinos_knn",
+        "x_km",
+        "y_km"
+      ],
+      "rmse": 0.4956,
+      "r2": 0.6585
+    },
+    {
+      "nombre": "Ubicación + clima + relieve",
+      "variables": [
+        "elev_mean",
+        "elev_std",
+        "media_zona",
+        "pend_mean",
+        "prec_abr_oct",
+        "prec_anomalia",
+        "tmax_media_abr_oct",
+        "tmin_media_abr_oct",
+        "vecinos_knn",
+        "x_km",
+        "y_km"
+      ],
+      "rmse": 0.4958,
+      "r2": 0.6582
+    },
+    {
+      "nombre": "Ubicación + índices + clima + relieve (final)",
+      "variables": [
+        "elev_mean",
+        "elev_std",
+        "media_zona",
+        "pend_mean",
+        "planet_evi_amplitud",
+        "planet_evi_auc_abr_oct",
+        "planet_evi_doy_fin",
+        "planet_evi_doy_inicio",
+        "planet_evi_doy_pico",
+        "planet_evi_duracion",
+        "planet_evi_jul_sep",
+        "planet_evi_m04",
+        "planet_evi_m05",
+        "planet_evi_m06",
+        "planet_evi_m07",
+        "planet_evi_m08",
+        "planet_evi_m09",
+        "planet_evi_m10",
+        "planet_evi_m11",
+        "planet_evi_may_jun",
+        "planet_evi_oct_nov",
+        "planet_evi_pend_bajada",
+        "planet_evi_pend_subida",
+        "planet_evi_pico",
+        "planet_lai_amplitud",
+        "planet_lai_auc_abr_oct",
+        "planet_lai_doy_fin",
+        "planet_lai_doy_inicio",
+        "planet_lai_doy_pico",
+        "planet_lai_duracion",
+        "planet_lai_jul_sep",
+        "planet_lai_m04",
+        "planet_lai_m05",
+        "planet_lai_m06",
+        "planet_lai_m07",
+        "planet_lai_m08",
+        "planet_lai_m09",
+        "planet_lai_m10",
+        "planet_lai_m11",
+        "planet_lai_may_jun",
+        "planet_lai_oct_nov",
+        "planet_lai_pend_bajada",
+        "planet_lai_pend_subida",
+        "planet_lai_pico",
+        "planet_msavi_amplitud",
+        "planet_msavi_auc_abr_oct",
+        "planet_msavi_doy_fin",
+        "planet_msavi_doy_inicio",
+        "planet_msavi_doy_pico",
+        "planet_msavi_duracion",
+        "planet_msavi_jul_sep",
+        "planet_msavi_m04",
+        "planet_msavi_m05",
+        "planet_msavi_m06",
+        "planet_msavi_m07",
+        "planet_msavi_m08",
+        "planet_msavi_m09",
+        "planet_msavi_m10",
+        "planet_msavi_m11",
+        "planet_msavi_may_jun",
+        "planet_msavi_oct_nov",
+        "planet_msavi_pend_bajada",
+        "planet_msavi_pend_subida",
+        "planet_msavi_pico",
+        "planet_ndvi_amplitud",
+        "planet_ndvi_auc_abr_oct",
+        "planet_ndvi_doy_fin",
+        "planet_ndvi_doy_inicio",
+        "planet_ndvi_doy_pico",
+        "planet_ndvi_duracion",
+        "planet_ndvi_jul_sep",
+        "planet_ndvi_m04",
+        "planet_ndvi_m05",
+        "planet_ndvi_m06",
+        "planet_ndvi_m07",
+        "planet_ndvi_m08",
+        "planet_ndvi_m09",
+        "planet_ndvi_m10",
+        "planet_ndvi_m11",
+        "planet_ndvi_may_jun",
+        "planet_ndvi_oct_nov",
+        "planet_ndvi_pend_bajada",
+        "planet_ndvi_pend_subida",
+        "planet_ndvi_pico",
+        "prec_abr_oct",
+        "prec_anomalia",
+        "tmax_media_abr_oct",
+        "tmin_media_abr_oct",
+        "vecinos_knn",
+        "x_km",
+        "y_km"
+      ],
+      "rmse": 0.4944,
+      "r2": 0.6601
     }
   ],
   "simulador": {
     "tipo": "lineal",
-    "descripcion": "Es el modelo ridge completo (alpha = 3.86), no un sustituto: da las mismas predicciones que el mapa.",
-    "rmse": 0.0,
-    "intercepto": 3.955362,
+    "descripcion": "Regresión ridge sustituta ajustada a las predicciones del ensamble sobre 11 variables interpretables; el mapa y la ficha usan el ensamble exacto.",
+    "rmse": 0.3161,
+    "intercepto": 3.952311,
     "variables": [
       {
-        "nombre": "ndvi_max",
-        "coef": 0.167165,
-        "media": 0.770928,
-        "std": 0.059942,
-        "min": 0.577,
-        "max": 0.907
-      },
-      {
-        "nombre": "evi_max",
-        "coef": -0.071165,
-        "media": 0.579725,
-        "std": 0.090681,
-        "min": 0.405,
-        "max": 0.877
-      },
-      {
-        "nombre": "lai_max",
-        "coef": -0.081659,
-        "media": 2.756971,
-        "std": 0.309245,
-        "min": 1.9,
-        "max": 3.663
-      },
-      {
-        "nombre": "prec_abr_oct",
-        "coef": 0.020821,
-        "media": 948.886074,
-        "std": 172.741599,
-        "min": 702.5829,
-        "max": 1459.1384
-      },
-      {
-        "nombre": "prec_anomalia",
-        "coef": -0.340472,
-        "media": 288.70239,
-        "std": 105.607131,
-        "min": 202.0289,
-        "max": 574.4595
-      },
-      {
-        "nombre": "tmin_media_abr_oct",
-        "coef": 0.469967,
-        "media": 12.875548,
-        "std": 0.552853,
-        "min": 11.4159,
-        "max": 13.4846
-      },
-      {
-        "nombre": "tmax_media_abr_oct",
-        "coef": -0.197219,
-        "media": 23.668524,
-        "std": 0.165941,
-        "min": 23.2503,
-        "max": 24.0085
+        "nombre": "vecinos_knn",
+        "coef": 0.425961,
+        "media": 3.947608,
+        "std": 0.730212,
+        "min": 2.7458,
+        "max": 5.0191
       },
       {
         "nombre": "elev_mean",
-        "coef": -0.033231,
-        "media": 2671.010489,
-        "std": 97.116959,
+        "coef": 0.017212,
+        "media": 2667.135638,
+        "std": 91.938652,
         "min": 2497.2,
         "max": 2905.25
       },
       {
         "nombre": "pend_mean",
-        "coef": 0.09411,
-        "media": 2.86207,
-        "std": 2.039314,
+        "coef": 0.023218,
+        "media": 2.875671,
+        "std": 2.085347,
         "min": 0.2826,
         "max": 8.9309
+      },
+      {
+        "nombre": "prec_abr_oct",
+        "coef": 0.030529,
+        "media": 960.746506,
+        "std": 172.622889,
+        "min": 702.5829,
+        "max": 1459.1384
+      },
+      {
+        "nombre": "prec_anomalia",
+        "coef": -0.081,
+        "media": 292.346424,
+        "std": 105.611798,
+        "min": 202.0289,
+        "max": 574.4595
+      },
+      {
+        "nombre": "tmin_media_abr_oct",
+        "coef": 0.180372,
+        "media": 12.883153,
+        "std": 0.562943,
+        "min": 11.4159,
+        "max": 13.4846
+      },
+      {
+        "nombre": "tmax_media_abr_oct",
+        "coef": -0.045384,
+        "media": 23.672843,
+        "std": 0.15786,
+        "min": 23.2503,
+        "max": 24.0085
+      },
+      {
+        "nombre": "planet_evi_may_jun",
+        "coef": 0.091831,
+        "media": 0.137396,
+        "std": 0.015435,
+        "min": 0.086,
+        "max": 0.193
+      },
+      {
+        "nombre": "planet_evi_pico",
+        "coef": -0.004089,
+        "media": 0.530168,
+        "std": 0.08253,
+        "min": 0.356,
+        "max": 0.811
+      },
+      {
+        "nombre": "planet_lai_auc_abr_oct",
+        "coef": -0.003623,
+        "media": 326.965701,
+        "std": 30.088055,
+        "min": 249.6195,
+        "max": 415.3595
+      },
+      {
+        "nombre": "planet_evi_duracion",
+        "coef": 0.029873,
+        "media": 93.751269,
+        "std": 25.782063,
+        "min": 19.0,
+        "max": 147.0
       }
     ]
   },
   "umbrales": {
     "bajo": 3.5,
     "alto": 4.5
+  },
+  "shap_base": 3.9546,
+  "preguntas_guia": {
+    "indice": {
+      "respuesta": "EVI (Planet)",
+      "detalle": "Importancia por permutación del ensamble agregada por índice (aumento de RMSE en t/ha): EVI 0.023, MSAVI 0.018, NDVI 0.016, LAI 0.014. Con los mismos folds, cada índice solo (RMSE): EVI 0.639, MSAVI 0.655, NDVI 0.678, LAI 0.685. La señal útil está en mayo-junio (emergencia) y en la velocidad de secado, no en el máximo del ciclo, que satura en agosto-septiembre."
+    },
+    "clima": {
+      "respuesta": "Precipitación del ciclo (acumulada abril-octubre y su anomalía respecto a 2022-2024)",
+      "detalle": "Cada variable climática sola, con los mismos folds (RMSE): anomalía de lluvia 0.584, temperatura mínima 0.603, lluvia acumulada 0.604, temperatura máxima 0.658. Una vez controlada la ubicación ninguna agrega más de 0.01 t/ha, porque el clima viene en 25 píxeles de 5 km y actúa en gran parte como proxy de la zona; dentro del modelo final la temperatura mínima es la que más mueve la predicción (permutación)."
+    },
+    "combinacion": {
+      "respuesta": "Ubicación (vecinos, zona, coordenadas) + relieve + clima + fenología de Planet",
+      "detalle": "RMSE por combinación con la misma receta de ensamble: Ubicación + índices + clima + relieve (final) 0.494; Ubicación + relieve 0.496; Ubicación + clima + relieve 0.496; Ubicación + índices 0.497; Solo ubicación 0.502; Ubicación + clima 0.507; Solo clima 0.537; Índices + clima + relieve (sin ubicación) 0.538; Solo índices (Planet) 0.629; Solo relieve 0.754."
+    }
   }
 }
