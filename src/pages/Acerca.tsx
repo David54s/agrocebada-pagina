@@ -77,9 +77,8 @@ export default function Acerca() {
           <li>Osmar Javier Hernández Prado</li>
           <li>David Carcamo Bonifacio</li>
           <li>David Cervantes Rojas</li>
-          {/* TODO: completar apellidos de Hugo e Isaac antes del despliegue final */}
-          <li>Hugo</li>
-          <li>Isaac</li>
+          <li>Hugo Antonio Palencia Vazquez</li>
+          <li>Isack Chazari Flores</li>
         </ul>
       </Card>
     </div>
