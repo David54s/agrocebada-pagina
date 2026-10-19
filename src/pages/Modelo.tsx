@@ -48,8 +48,9 @@ export default function Modelo() {
         <h1 className="text-2xl font-semibold">¿Qué tan confiable es la estimación?</h1>
         <Card>
           <p className="text-lg">
-            En promedio, la estimación se aleja <strong>± {num(metricas.rmse, 1)} toneladas por hectárea</strong> del
-            rendimiento reportado al cosechar.
+            El error típico de la estimación es de <strong>{num(metricas.rmse, 2)} toneladas por hectárea</strong>{' '}
+            (RMSE) frente al rendimiento reportado; la diferencia promedio sin signo es de {num(metricas.mae, 2)} t/ha
+            (MAE). No es un rango garantizado: en algunas parcelas el error es menor y en otras mayor.
           </p>
           <p className="mt-2 text-sm text-ink-2">
             Lo medimos con {nEntr} parcelas cuyo rendimiento conocemos: cada una se estimó con un modelo que no la vio

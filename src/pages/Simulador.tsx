@@ -70,8 +70,12 @@ export default function Simulador() {
         <h1 className="text-2xl font-semibold">Simulador de rendimiento</h1>
         <p className="max-w-prose text-sm text-ink-2">
           {modo === 'productor'
-            ? 'Mueve los controles para ver cómo cambiaría la cosecha esperada si cambian las condiciones de tu parcela.'
-            : `Ejecuta el modelo en el navegador. ${sim.descripcion} ${sim.rmse ? `RMSE del sustituto: ${num(sim.rmse, 3)} t/ha.` : ''}`}
+            ? `Mueve los controles para explorar cómo cambiaría el rendimiento estimado si cambian las condiciones de la parcela.${
+                sim.rmse ? ' Es una aproximación simplificada del modelo; el mapa y las fichas usan el modelo completo.' : ''
+              }`
+            : sim.rmse
+              ? `Ejecuta en el navegador una aproximación del modelo final. ${sim.descripcion} Su discrepancia de ajuste frente al ensamble es de ${num(sim.rmse, 3)} t/ha (RMSE sobre las mismas 197 parcelas); no tiene validación propia contra rendimientos reales ni interpretación causal.`
+              : `Ejecuta el modelo en el navegador. ${sim.descripcion}`}
         </p>
       </div>
 
@@ -151,13 +155,14 @@ export default function Simulador() {
 
         <div className="space-y-4 lg:sticky lg:top-20 lg:self-start">
           <Card>
-            <div className="text-sm text-ink-2">Rendimiento esperado</div>
+            <div className="text-sm text-ink-2">Rendimiento estimado</div>
             <output className="block text-5xl font-semibold" aria-live="polite">
               {num(pred, 2)} <span className="text-xl font-normal text-ink-2">t/ha</span>
             </output>
             <div className="mt-1 text-sm text-ink-2">
-              ± {num(modelo.metricas.rmse, 1)} t/ha de error típico del modelo
-              {sim.rmse ? ` · el simulador aproxima al modelo con ±${num(sim.rmse, 2)} t/ha` : ''}
+              Error típico del modelo (RMSE de validación): {num(modelo.metricas.rmse, 2)} t/ha
+              {sim.rmse ? `. El simulador difiere del modelo completo en ${num(sim.rmse, 2)} t/ha (RMSE de ajuste)` : ''}.
+              No son intervalos calibrados.
             </div>
             <div className="mt-3">
               <Semaforo valor={pred} umbrales={modelo.umbrales} conConsejo={modo === 'productor'} />

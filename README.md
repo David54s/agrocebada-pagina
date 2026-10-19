@@ -31,8 +31,9 @@ npm run dev        # http://localhost:5173
 
 ## Datos del modelo
 
-Los archivos de `public/data/` ya son **datos reales** (197 parcelas de FIRA) con un modelo ridge
-provisional. Los genera `src/exportar_app.py` del repo de modelación
+Los archivos de `public/data/` son **datos reales** (197 parcelas de FIRA) con el **modelo final**:
+un ensamble de LightGBM y Random Forest (RMSE de validación cruzada 0.491 t/ha). El simulador usa
+una regresión ridge sustituta de ese ensamble. Los genera `src/exportar_app.py` del repo de modelación
 ([Cebada-Vision](https://github.com/OsmarGHz/Cebada-Vision)) con el formato de
 [docs/CONTRATO_DATOS.md](docs/CONTRATO_DATOS.md). Para actualizarlos:
 

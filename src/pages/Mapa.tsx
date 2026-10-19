@@ -78,7 +78,7 @@ export default function Mapa() {
         <h1 className="text-2xl font-semibold">Mapa de parcelas</h1>
         <p className="text-sm text-ink-2">
           {modo === 'productor'
-            ? 'Busca tu parcela en el mapa o en la tabla para ver cuánto se espera que rinda.'
+            ? 'Busca tu parcela en el mapa o en la tabla para ver su rendimiento estimado.'
             : 'Rendimiento estimado por parcela. Usa la capa satelital para revisar el contexto de cada polígono.'}
         </p>
       </div>

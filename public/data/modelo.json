@@ -4,7 +4,7 @@
   "generado": "2026-10-17",
   "es_mock": false,
   "descripcion": "Promedio de dos modelos de árboles: LightGBM con ubicación (rendimiento de parcelas vecinas, zona, coordenadas), relieve y clima; y Random Forest que además usa la fenología de los índices de Planet (NDVI, EVI, LAI, MSAVI). Validado con 5 folds estratificados por estado, repetidos 10 veces.",
-  "intervalo": "Intervalo de predicción al 80 % (± 1.28 · RMSE de validación cruzada)",
+  "intervalo": "Rango orientativo (± 1.28 · RMSE de validación cruzada; cobertura del 80 % no calibrada)",
   "variables": [
     {
       "nombre": "vecinos_knn",
@@ -125,8 +125,9 @@
         "r2": -0.018
       },
       "knn_espacial": {
-        "rmse": 0.506,
-        "r2": 0.644
+        "rmse": 0.501,
+        "mae": 0.362,
+        "r2": 0.65
       },
       "ridge_provisional": {
         "rmse": 0.551,

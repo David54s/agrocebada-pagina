@@ -55,20 +55,20 @@ export const NIVEL_INFO: Record<Nivel, { etiqueta: string; color: string; icono:
     color: 'var(--critical)',
     icono: '▼',
     consejo:
-      'Se espera una cosecha por debajo de lo común en la región. Conviene revisar la fertilización y el control de malezas, y considerar un seguro agrícola.',
+      'La estimación está por debajo de lo común en la región. Vale la pena revisar la fertilización y el control de malezas, y valorar un seguro agrícola.',
   },
   medio: {
     etiqueta: 'Rendimiento medio',
     color: 'var(--warning)',
     icono: '●',
     consejo:
-      'Se espera una cosecha dentro de lo normal para la región. Hay margen de mejora con un buen manejo de nutrientes y de la fecha de siembra.',
+      'La estimación está dentro de lo normal para la región. Puede haber margen de mejora con el manejo de nutrientes y la fecha de siembra.',
   },
   alto: {
     etiqueta: 'Rendimiento alto',
     color: 'var(--good)',
     icono: '▲',
     consejo:
-      'Se espera una cosecha por encima de lo común. La parcela muestra buen vigor; es un buen perfil para planear la comercialización o el financiamiento.',
+      'La estimación está por encima de lo común en la región y la parcela muestra buen vigor.',
   },
 }

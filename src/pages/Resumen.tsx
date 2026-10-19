@@ -31,11 +31,11 @@ export default function Resumen() {
       <section className="grid gap-6 lg:grid-cols-[1.1fr_1fr] lg:items-center">
         <div>
           <p className="text-sm font-medium text-accent">Reto AgroCebada · Puebla, Tlaxcala e Hidalgo</p>
-          <h1 className="mt-1 text-3xl font-semibold sm:text-4xl">¿Cuánta cebada rendirá cada parcela?</h1>
+          <h1 className="mt-1 text-3xl font-semibold sm:text-4xl">¿Cuánta cebada produjo cada parcela?</h1>
           <p className="mt-3 max-w-prose text-ink-2">
-            Con imágenes satelitales, clima y relieve estimamos el rendimiento de {parcelas.length} parcelas de cebada de
-            temporal. La herramienta sirve al productor para anticipar su cosecha y a FIRA para dimensionar el
-            financiamiento con información objetiva.
+            Con imágenes satelitales, clima, relieve y ubicación estimamos el rendimiento de {parcelas.length} parcelas
+            de cebada de temporal del ciclo 2025. El análisis es retrospectivo: usa el ciclo completo. Con validación
+            en nuevos ciclos, este enfoque podría ayudar a anticipar cosechas y a dimensionar el financiamiento.
           </p>
           <div className="mt-5 max-w-md rounded-xl border border-line bg-surface p-4">
             <BuscadorId />
@@ -72,12 +72,12 @@ export default function Resumen() {
           detalle={`${parcelas.length - porPredecir.length} con rendimiento reportado`}
         />
         {modo === 'analista' ? (
-          <Stat etiqueta="Error típico (RMSE)" valor={tha(modelo.metricas.rmse)} detalle={`R² ${num(modelo.metricas.r2, 2)} · CV espacial`} />
+          <Stat etiqueta="Error típico (RMSE)" valor={tha(modelo.metricas.rmse)} detalle={`R² ${num(modelo.metricas.r2, 2)} · validación cruzada`} />
         ) : (
           <Stat
-            etiqueta="Margen de error típico"
-            valor={`± ${num(modelo.metricas.rmse, 1)} t/ha`}
-            detalle="Qué tanto suele variar la estimación"
+            etiqueta="Error típico de la estimación"
+            valor={`${num(modelo.metricas.rmse, 2)} t/ha`}
+            detalle="Referencia promedio; no es un rango garantizado por parcela"
           />
         )}
       </section>

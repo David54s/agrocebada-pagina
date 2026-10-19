@@ -39,15 +39,16 @@ export default function Acerca() {
         <p className="mt-2 text-sm text-ink-2">
           Validación: {modelo.metricas.validacion}. RMSE {modelo.metricas.rmse} t/ha, MAE {modelo.metricas.mae} t/ha, R²{' '}
           {modelo.metricas.r2}. Referencias con los mismos folds: predecir la media regional da RMSE 0.851 y un kNN
-          espacial puro 0.506.
+          espacial puro (8 vecinos) 0.501. La diferencia frente al kNN es pequeña y no demuestra superioridad
+          estadística.
         </p>
       </Card>
 
       <Card titulo="Limitaciones">
         <ul className="list-disc space-y-1.5 pl-5 text-sm text-ink-2">
           <li>
-            El rendimiento de entrenamiento lo reporta en su mayoría la comercializadora que compra la cosecha, sin
-            medición instrumental; incluye ruido.
+            El rendimiento de entrenamiento proviene del pesaje en báscula de la cosecha de cada parcela, sin ajustes por
+            humedad, impurezas o mermas; lo reportan comercializadoras y productores.
           </li>
           <li>El clima viene en celdas de ~5 km: parcelas vecinas comparten el mismo valor de lluvia y temperatura.</li>
           <li>Todas las parcelas son de temporal: el modelo no aplica directamente a parcelas de riego.</li>
@@ -66,9 +67,11 @@ export default function Acerca() {
 
       <Card titulo="Ciencia de datos e inclusión financiera">
         <p className="text-sm text-ink-2">
-          Una estimación objetiva y temprana del rendimiento reduce la incertidumbre de productores y financieras: ayuda a
-          dimensionar créditos de avío según la producción esperada, a diseñar seguros paramétricos y a dar acceso a
-          financiamiento formal a pequeños productores que no cuentan con historial documentado.
+          Una estimación objetiva del rendimiento podría reducir la incertidumbre de productores y financieras: ayudar a
+          dimensionar créditos de avío, a diseñar seguros paramétricos y a dar acceso a financiamiento formal a pequeños
+          productores sin historial documentado. Este análisis es retrospectivo: usa el ciclo 2025 completo, con
+          observaciones hasta noviembre. Anticipar la cosecha antes de que termine el ciclo, aplicarlo a nuevos ciclos o
+          usarlo en decisiones de crédito requiere fijar una fecha de corte y validarlo en el tiempo y en operación.
         </p>
       </Card>
 

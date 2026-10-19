@@ -63,7 +63,10 @@ export default function Parcela() {
               <div className="tabular mt-1 text-sm text-ink-2">
                 {modo === 'analista'
                   ? `${modelo.intervalo}: ${num(p.pred_lo, 2)} – ${num(p.pred_hi, 2)} t/ha`
-                  : `Lo más probable: entre ${num(p.pred_lo, 1)} y ${num(p.pred_hi, 1)} t/ha`}
+                  : `Rango orientativo: entre ${num(p.pred_lo, 1)} y ${num(p.pred_hi, 1)} t/ha`}
+              </div>
+              <div className="mt-0.5 text-xs text-muted">
+                Calculado con el error típico del modelo; es una referencia, no un intervalo calibrado.
               </div>
               <div className="mt-4">
                 <Semaforo valor={p.rendimiento_pred} umbrales={modelo.umbrales} conConsejo={modo === 'productor'} />
